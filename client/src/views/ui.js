@@ -1,8 +1,8 @@
-var Music = require('../models/music');
+var EntriesDataRequester = require('../models/entriesDataRequester');
 
 var UI = function() {
-  var entry = new Music();
-  music.all(function(result){
+  var entriesDataRequester = new EntriesDataRequester();
+  entries.all(function(result){
     this.render(result);
   }.bind(this));
 }
@@ -20,17 +20,17 @@ UI.prototype = {
     element.appendChild(pTag);
   },
 
-  render: function(music) {
-    var container = document.getElementById('music');
-
-    for (var entry of music) {
+  render: function(entries) {
+    // var container = document.getElementById('entries');
+    var container = document.querySelector('#entires');
+    entries.forEach(function(entry){
       var li = document.createElement('li');
-      this.appendText(li, music.artist, 'Artist: ');
-      this.appendText(li, music.album, 'Album: ');
+      this.appendText(li, entry.artist, 'Artist: ');
+      this.appendText(li, entry.album, 'Album: ');
     
       container.appendChild(li);
-    }
-  }
+    }.bind(this));
+  },
 }
 
 module.exports = UI;

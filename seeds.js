@@ -1,6 +1,9 @@
 use music;
+db.dropDatabase();
 
-db.music.insert([
+use music;
+
+db.entries.insert([
 {
   artist: "John Martyn",
   album: "Solid Air"
