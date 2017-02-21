@@ -63,23 +63,24 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Films = __webpack_require__(2);
+var EntriesDataRequester = __webpack_require__(2);
 
 var UI = function() {
-  var films = new Films();
-  films.all(function(result){
+  var entriesDataRequester = new EntriesDataRequester();
+  entries.all(function(result){
     this.render(result);
   }.bind(this));
 }
 
 UI.prototype = {
+
   createText: function(text, label) {
     var p = document.createElement('p');
     p.innerText = label + text;
@@ -91,97 +92,66 @@ UI.prototype = {
     element.appendChild(pTag);
   },
 
-  createReview: function(li, review) {
-    this.appendText(li, review.comment, 'Comment: ');
-    this.appendText(li, review.rating, 'Rating: ');
-    this.appendText(li, review.author, 'Author: ');
-  },
-
-  render: function(films) {
-    var container = document.getElementById('films');
-
-    for (var film of films) {
+  render: function(entries) {
+    // var container = document.getElementById('entries');
+    var container = document.querySelector('#entires');
+    entries.forEach(function(entry){
       var li = document.createElement('li');
-      this.appendText(li, film.title, 'Film: ');
-      this.appendText(li, film.genre, 'Genre: ');
-      
-      for (var review of film.reviews){
-        this.createReview(li, review);
-      }
-
+      this.appendText(li, entry.artist, 'Artist: ');
+      this.appendText(li, entry.album, 'Album: ');
+    
       container.appendChild(li);
-    }
-  }
+    }.bind(this));
+  },
 }
 
 module.exports = UI;
-
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
-var Film = function(options) {
-  this.title = options.title;
-  this.actors = options.actors;
-  this.reviews = options.reviews || [];
-  this.genre = options.genre;
+var Entries = function(options){
+  this.artist = options.name;
+  this.album = options.album;
 }
 
-Film.prototype = {
-  addReview: function(review) {
-    this.reviews.push(review);
-  }
-}
-
-module.exports = Film;
-
+module.exports = Entries;
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Film = __webpack_require__(1);
-var Review = __webpack_require__(3);
+var Entries = __webpack_require__(1);
 
-var Films = function() {}
+var EntriesDataRequester = function(){
 
-  Films.prototype = {
-    makeRequest: function(url, callback){
-      var request = new XMLHttpRequest();
-      request.open('GET', url);
-      request.onload = callback;
-      request.send();
-    },
+};
 
-    all: function(callback){
-      this.makeRequest('http://localhost:3000/api/films', function(){
-        if(this.status !== 200) return;
-          var jsonString = this.responseText;
-          var result = JSON.parse(jsonString);
+EntriesDataRequester.prototype = {
+  makeGetRequest: function(url, callback){
+    var request = new XMLHttpRequest();
+    request.open('GET', url);
+    request.onload = callback;
+    request.send();
+  },
 
-          callback(result);
-        });
-    }
+  all: function(callback){
+    var url = 'http://localhost:3000/api/entries';
+    this.makeGetRequest(url, function(){
+      if(this.status !== 200) return;
+      var jsonString = this.responseText;
+      var result = JSON.parse(jsonString);
+
+      callback(result);
+    })
   }
-  module.exports = Films;
+}
 
+module.exports = EntriesDataRequester;
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-var Review = function(options) {
-  this.comment = options.comment;
-  this.rating = options.rating;
-  this.author = options.author;
-}
-
-module.exports = Review;
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var UI = __webpack_require__(0);
