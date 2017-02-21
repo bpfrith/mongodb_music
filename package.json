@@ -1,0 +1,22 @@
+{
+  "name": "mongodb_music",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha client/src/models/specs",
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.1",
+    "mongodb": "^2.2.24"
+  },
+  "devDependencies": {
+    "body-parser": "^1.16.1",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "webpack": "^2.2.1"
+  }
+}
